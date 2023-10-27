@@ -1,0 +1,36 @@
+importar { Terminal } desde "@es-js/terminal"
+importar { obtenerJson } desde "https://cdn.esjs.dev/MYewdgzgLgBCBGUCmYkCcBSFwwLwwEMIBLMYNcEGAMwFczicAKWtAGwEoYBvAKBhihIsNEggAHWmKgE8MMePQE0NJFGAALFuw78YoqCDRhl8iUpWiJU6AQB0AK2xgmugL69eSAB7ijMlW44RBR0LBwPIA"
+importar cryptojs desde "https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/+esm"
+
+var CONTRASEÑA_MD5 = "c218913679d93a6b9e93fbb7fb22da50"
+
+funcion calcularMd5(cadena) {
+  retornar cryptojs.MD5(Cadena(cadena)).aCadena()
+}
+
+asincrono funcion obtenerCotizacion() {
+  const dolarBlue = esperar obtenerJson("https://dolarapi.com/v1/dolares/blue")
+  Terminal.escribir("Precio de Compra:  $ " + dolarBlue.compra)
+  Terminal.escribir("Precio de Venta:  $ " + dolarBlue.venta)
+  var promedio = (Number(dolarBlue.compra) + Number(dolarBlue.venta)) / 2;
+  Terminal.escribir("Promedio:  $ " + promedio);
+  Terminal.escribir("Fecha de Cotización: " + dolarBlue.fechaActualizacion)
+}
+
+asincrono funcion inicio() {
+  Terminal.limpiar()
+  Terminal.escribir("Ingresa tu contraseña")
+  var contraseña = esperar Terminal.leer()
+
+  si (calcularMd5(contraseña) === CONTRASEÑA_MD5) {
+    obtenerCotizacion()
+  } sino {
+    Terminal.escribir("Contraseña incorrecta")
+    Terminal.escribir("Presiona ENTER para continuar")
+    esperar Terminal.leerEnter()
+
+    inicio()
+  }
+}
+
+inicio()
